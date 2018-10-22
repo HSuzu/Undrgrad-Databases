@@ -1,7 +1,21 @@
-with brs(Forename, Surname, driverId) as (
-	select Forename, Surname, driverId from Driver where Nationality = 'Brazilian'
-), lastLapForRace(rId, lap) as (
-	select distinct raceId as rId, max(lap) from lapTimes group by raceId
-), winnerForRace(raceId, driverId) as (
-	select raceId, driverId from lapTimes, lastLapforRace where (raceId = rId AND laptimes.lap = lastLapforRace.lap) AND position = '1'
-) select Distinct Forename, Surname from brs, winnerForRace where brs.driverId = winnerForRace.driverId
+--Q3
+WITH
+lapsForRace(raceID1, nLaps) AS(
+	SELECT DISTINCT raceid , max(lap)
+	FROM LapTimes
+	GROUP BY raceid
+),
+winnerForRace(raceID2, driverID2) AS(
+	SELECT raceid, driverid
+	FROM LapTimes, lapsForRace
+	WHERE (raceid=raceID1 AND lap=nLaps) AND position='1'
+),
+racesForDriver(driverID3, nRaces) AS(
+	SELECT driverID2, count(raceID2)
+	FROM winnerForRace
+	GROUP BY driverID2
+)
+
+SELECT DISTINCT Forename, Surname, nRaces
+	FROM Driver, racesForDriver
+	WHERE (driverid=driverID3 AND nRaces=(SELECT max(nRaces) FROM racesForDriver))

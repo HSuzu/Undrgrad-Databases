@@ -16,7 +16,7 @@ acess(raceid, laps, started, finished) as (
 		where laptimes.raceid = fim.raceid 
 		and fim.raceid=comeco.raceid 
 		group by laptimes.raceid, fim.lap, comeco.count, fim.count
-) select acess.raceid, races.year, races.round, races.circuitid, races.name, races.date, races.time, races.url, acess.laps, acess.started, acess.finished from races, acess
+) select acess.raceid, acess.laps, acess.started, acess.finished from races, acess
 	where races.raceid=acess.raceid;
 alter table races
 	add column laps integer,
@@ -32,5 +32,3 @@ update races
 set finished = races2.finished from races2
 where races.raceid=races2.raceid;
 drop table if exists races2;
-
-select * from races;

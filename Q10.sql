@@ -32,5 +32,3 @@ update races
 set finished = races2.finished from races2
 where races.raceid=races2.raceid;
 drop table if exists races2;
-
-select * from races;
